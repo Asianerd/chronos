@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>chronos</title>
+        <link rel="shortcut icon" href="icon.ico">
+        <meta charset="utf-8">
+        <meta name="author" content="han_yuji_">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="/styles/style.css">
+        <link rel="stylesheet" href="./styles/homepage.css">
+    </head>
+    <body>
+        <div id="parent">
+            <div id="sidebar">
+                <div id="user-data">
+                    <img src="/assets/profile.png">
+                    <div>
+                        <h4>username</h4>
+                        <h4>software developer</h4>
+                    </div>
+                </div>
+                <div id="create" aria-label="closed">
+                    <img src="/assets/add.png">
+                    <div>
+                        <h4 onclick="toggleTaskSelection()">
+                            create
+                        </h4>
+                        <div>
+                            <h5 onclick="toggleTaskCreation('Once')">→ one-time</h5>
+                            <h5 onclick="toggleTaskCreation('Repeating')">→ repeating</h5>
+                        </div>
+                    </div>
+                </div>
+                <div id="soon">
+                    <h4>Fetch laundry</h4>
+                    <h5>12:00</h5>
+                    <div id="actions">
+                        <h5>29 mins</h5>
+                        <h5>dismiss</h5>
+                    </div>
+                </div>
+                <div id="upcoming">
+                    finish later
+                </div>
+            </div>
+            <div id="main">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th>
+                            <div id="header-container">
+                                <div class="header"><div><h4>mon</h4><h4>14</h4></div><div></div></div>
+                                <div class="header"><div><h4>tue</h4><h4>15</h4></div><div></div></div>
+                                <div class="header"><div><h4>wed</h4><h4>16</h4></div><div></div></div>
+                                <div class="header"><div><h4>thu</h4><h4>17</h4></div><div></div></div>
+                                <div class="header"><div><h4>fri</h4><h4>18</h4></div><div></div></div>
+                                <div class="header"><div><h4>sat</h4><h4>19</h4></div><div></div></div>
+                                <div class="header"><div><h4>sun</h4><h4>20</h4></div><div></div></div>
+                            </div>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <td>
+                            <div id="time-pointer-text">
+                                <h4>huh</h4>
+                            </div>
+                            <div><h4>1am</h4></div>
+                            <div><h4>2am</h4></div>
+                            <div><h4>3am</h4></div>
+                            <div><h4>4am</h4></div>
+                            <div><h4>5am</h4></div>
+                            <div><h4>6am</h4></div>
+                            <div><h4>7am</h4></div>
+                            <div><h4>8am</h4></div>
+                            <div><h4>9am</h4></div>
+                            <div><h4>10am</h4></div>
+                            <div><h4>11am</h4></div>
+                            <div><h4>12am</h4></div>
+                            <div><h4>1pm</h4></div>
+                            <div><h4>2pm</h4></div>
+                            <div><h4>3pm</h4></div>
+                            <div><h4>4pm</h4></div>
+                            <div><h4>5pm</h4></div>
+                            <div><h4>6pm</h4></div>
+                            <div><h4>7pm</h4></div>
+                            <div><h4>8pm</h4></div>
+                            <div><h4>9pm</h4></div>
+                            <div><h4>10pm</h4></div>
+                            <div><h4>11pm</h4></div>
+                            <div><h4>12pm</h4></div>
+                        </td>
+                        <td id="content">
+                            <div id="time-pointer">
+                                <hr>
+                            </div>
+                            <div id="gridline">
+                                <hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
+                            </div>
+                            <div id="task-creation" data-colour_theme="0" aria-label="closed" data-species="Once">
+                                <div>
+                                    <input type="text" id="title" placeholder="title" oninput="verifyValidity()">
+                                    <img id="exit-button" src="/assets/cross.png" onclick="toggleTaskCreation(false)">
+                                </div>
+                                <textarea id="description" placeholder="description"></textarea>
+                                <div id="time">
+                                    <h4>
+                                        time :
+                                    </h4>
+                                    <div>
+                                        <div id="start">
+                                            <div>
+                                                <input type="number" min="0" max="23" value="00" onchange="cleanTimeInput(this);">
+                                                <h5>:</h5>
+                                                <input type="number" min="0" max="60" value="00" onchange="cleanTimeInput(this, minute=true);">
+                                            </div>
+                                            <input type="date" min="1970-01-01" max="2038-1-18">
+                                        </div>
+                                        <h4>
+                                            to
+                                        </h4>
+                                        <div id="end">
+                                            <div>
+                                                <input type="number" min="0" max="23" value="00" onchange="cleanTimeInput(this);" >
+                                                <h5>:</h5>
+                                                <input type="number" min="0" max="60" value="00" onchange="cleanTimeInput(this, minute=true);">
+                                            </div>
+                                            <input type="date" min="1970-01-01" max="2038-1-18">
+                                        </div>
+                                        <label id="all-day">
+                                            <h4>
+                                                all day
+                                            </h4>
+                                            <input type="checkbox">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="repeat">
+                                    <h5>
+                                        repeat :
+                                    </h5>
+                                    <div>
+                                        <label><h5>m</h5><input type="checkbox"></label>
+                                        <label><h5>t</h5><input type="checkbox"></label>
+                                        <label><h5>w</h5><input type="checkbox"></label>
+                                        <label><h5>t</h5><input type="checkbox"></label>
+                                        <label><h5>f</h5><input type="checkbox"></label>
+                                        <label><h5>s</h5><input type="checkbox"></label>
+                                        <label><h5>s</h5><input type="checkbox"></label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="type-selection">
+                                        <h4>type : </h4>
+                                        <div>
+                                            <label><h4>task</h4><input type="radio" name="type-select" checked></label>
+                                            <label><h4>event</h4><input type="radio" name="type-select"></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div id="colour-picker" aria-label="closed">
+                                            <img src="/assets/colour_wheel.png" onclick="toggleColourPicker()">
+                                            <div></div>
+                                        </div>
+                                        <h4 id="create" onclick="addTask(this)" aria-label="disabled">
+                                            create
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="field">
+                                <!-- <div class="item" style="top:calc(10 * var(--task-height)); height:calc(calc(2 * var(--task-height)) - 4ch); left:calc(var(--task-width) * 0); background:crimson;">
+                                    <div>
+                                        <img id="completion" src="/assets/uncompleted.png">
+                                        <h3 id="title">lorem ipsum dolor sit amet elit</h3>
+                                    </div>
+                                    <h4 id="description">description</h4>
+                                    <h5 id="time">12:00-14:00</h5>
+                                </div> -->
+                                <!-- <div class="item" style="background:royalblue;">
+                                        <h3 id="title">do this bla bla bla bla bla bla</h3>
+                                        <h4 id="time">12:00</h4>
+                                </div>
+                                <div class="item" style="top:10em; left:calc(var(--task-width) * 2); background:crimson;">
+                                    <h3 id="title">do this bla bla bla bla bla bla</h3>
+                                    <h4 id="time">1:30-2:30</h4>
+                                </div>
+                                <div class="item-container" style="top:20em; left:calc(var(--task-width) * 1); height:25em;">
+                                    <h1>
+                                        2
+                                    </h1>
+                                    <div id="user-click" onclick="toggleItemContainer(this)">
+                                    </div>
+                                    <div id="children">
+                                        <div class="item" style="height:25em; left: calc(calc(var(--task-width) * 1) - 1ch); background:crimson;">
+                                            <h3 id="title">do this bla bla bla bla bla bla</h3>
+                                            <h4 id="time">1:30-2:30</h4>
+                                        </div>
+                                        <div class="item" style="height:20em; left: calc(calc(var(--task-width) * 2) - 1ch); background:crimson;">
+                                            <h3 id="title">do this bla bla bla bla bla bla</h3>
+                                            <h4 id="time">1:30-2:30</h4>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+            <div id="overlay" aria-label="closed">
+                <!-- used for task selection, etc etc -->
+                <div id="task-selection">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/source.js"></script>
+        <script src="./scripts/homepage.js"></script>
+    </body>
+</html>
