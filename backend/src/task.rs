@@ -1,5 +1,10 @@
+use std::{sync::Mutex, str::FromStr};
+
+use rocket::State;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumString;
+
+use crate::{account_handler::{AccountResult, Database}, login_info::LoginInformation, utils};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Task {
@@ -80,3 +85,132 @@ pub enum OccuranceSpecies {
     // eg : 10010000 gym every monday and thursday
     // ignore first bit 
 }
+
+// #region api calls
+#[post("/<start>/<end>", data="<login>")]
+pub fn fetch_library(db: &State<Mutex<Database>>, login: LoginInformation, start: u128, end: u128) -> String {
+    let db = db.lock().unwrap();
+    let result = db.login(&login);
+    match result {
+        AccountResult::Success(user_id) => utils::parse_response(Ok(serde_json::to_string(&db.users.get(&user_id).unwrap().fetch_library(start, end)).unwrap())),
+        e => utils::parse_response(Err(e))
+    }
+}
+
+#[post("/<r_species>/<r_time_species>/<start>/<end>/<r_occurance_species>/<repeating_day>/<title>/<description>/<colour>", data="<login>")]
+pub fn add_task(
+    db: &State<Mutex<Database>>,
+    login: LoginInformation,
+    r_species: String,
+    r_time_species: String, start: u128, end: u128,
+    r_occurance_species: String, repeating_day: u128,
+    title: String,
+    description: String,
+    colour: u128
+) -> String {
+// pub fn add_task(db: &State<Mutex<Database>>, login: LoginInformation, r_species: String, r_time_species: String, repeating_day: u128, title: String, description: String, start: u128, end: Option<u128>, colour: u128) -> String {
+    let mut db = db.lock().unwrap();
+    let result = db.login(&login);
+    match result {
+        AccountResult::Success(user_id) => {
+            let species = match Species::from_str(&r_species) {
+                Ok(i) => i,
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            let occurance_species = match OccuranceSpecies::from_str(&r_occurance_species) {
+                Ok(i) => match i {
+                    OccuranceSpecies::Repeating(_) => OccuranceSpecies::Repeating(repeating_day as u8),
+                    _ => i
+                },
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            let time_species = match TimeSpecies::from_str(&r_time_species) {
+                Ok(i) => match i {
+                    TimeSpecies::Start(_) => TimeSpecies::Start(start),
+                    TimeSpecies::Range(_, _) => TimeSpecies::Range(start, end),
+                    TimeSpecies::AllDay(_) => TimeSpecies::AllDay(start),
+                    TimeSpecies::DayRange(_, _) => TimeSpecies::DayRange(start, end)
+                },
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            db.users.get_mut(&user_id).unwrap().add_task(species, occurance_species, time_species, title, description, colour);
+            db.save();
+            utils::parse_response(Ok("success".to_string()))
+        },
+        e => utils::parse_response(Err(e))
+    }
+}
+
+#[post("/<task_id>/<week_start>/<current_day>", data="<login>")]
+pub fn complete_task(db: &State<Mutex<Database>>, login: LoginInformation, task_id: usize, week_start: u128, current_day: u8) -> String {
+    let mut db = db.lock().unwrap();
+    let result = db.login(&login);
+    match result {
+        AccountResult::Success(user_id) => {
+            db.save();
+            utils::parse_response(Ok(db.users.get_mut(&user_id).unwrap().complete_task(
+                task_id as usize,
+                week_start,
+                current_day
+            ).to_string()))
+        },
+        e => utils::parse_response(Err(e))
+    }
+}
+
+#[post("/<task_id>", data="<login>")]
+pub fn delete_task(db: &State<Mutex<Database>>, login: LoginInformation, task_id: usize) -> String {
+    let mut db = db.lock().unwrap();
+    let result = db.login(&login);
+    match result {
+        AccountResult::Success(user_id) => {
+            let r = db.users.get_mut(&user_id).unwrap().delete_task(task_id as usize);
+            utils::parse_response(Ok(r.to_string()))
+        },
+        e => utils::parse_response(Err(e))
+    }
+}
+
+#[post("/<task_id>/<r_species>/<r_time_species>/<start>/<end>/<r_occurance_species>/<repeating_day>/<title>/<description>/<colour>", data="<login>")]
+pub fn update_task(
+    db: &State<Mutex<Database>>,
+    login: LoginInformation,
+    task_id: usize,
+    r_species: String,
+    r_time_species: String, start: u128, end: u128,
+    r_occurance_species: String, repeating_day: u128,
+    title: String,
+    description: String,
+    colour: u128
+) -> String {
+    let mut db = db.lock().unwrap();
+    let result = db.login(&login);
+    match result {
+        AccountResult::Success(user_id) => {
+            let species = match Species::from_str(&r_species) {
+                Ok(i) => i,
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            let occurance_species = match OccuranceSpecies::from_str(&r_occurance_species) {
+                Ok(i) => match i {
+                    OccuranceSpecies::Repeating(_) => OccuranceSpecies::Repeating(repeating_day as u8),
+                    _ => i
+                },
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            let time_species = match TimeSpecies::from_str(&r_time_species) {
+                Ok(i) => match i {
+                    TimeSpecies::Start(_) => TimeSpecies::Start(start),
+                    TimeSpecies::Range(_, _) => TimeSpecies::Range(start, end),
+                    TimeSpecies::AllDay(_) => TimeSpecies::AllDay(start),
+                    TimeSpecies::DayRange(_, _) => TimeSpecies::DayRange(start, end)
+                },
+                Err(e) => return utils::parse_response(Err(e))
+            };
+            db.users.get_mut(&user_id).unwrap().update_task(task_id, species, occurance_species, time_species, title, description, colour);
+            utils::parse_response(Ok("success".to_string()))
+        },
+        e => utils::parse_response(Err(e))
+    }
+}
+// #endregion

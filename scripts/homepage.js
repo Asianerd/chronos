@@ -1,11 +1,3 @@
-var username = fetchLocalStorage("chronos_username");
-var password = fetchLocalStorage("chronos_password");
-// if null then redirect to landing page
-
-if ((username === null) || (password === null)) {
-    window.location.href = "./login.html";
-}
-
 var dates = [];
 var dateRange = {
     "start": 0, // number of days since 1/1/1970
@@ -15,6 +7,9 @@ var dateRange = {
 }
 // year, month, day offset
 // var dateOffset = [0, 0, 0];
+
+console.log(username);
+console.log(password);
 
 var container = document.querySelector("#main #content #field");
 var library = [];
@@ -71,19 +66,6 @@ function login_info() {
         "username":username,
         "password":password
     });
-}
-
-function parseResponse(r) {
-    // console.log(r);
-
-    let result = JSON.parse(r);
-    if (result['type'] != "success") {
-        // console.log(result);
-        // window.location.href = "./login.html";
-        // or some kind of proper error handling
-    }
-
-    return decodeURIComponent(result['data']);
 }
 
 function getEpochDate(gmt=true, d=null) {

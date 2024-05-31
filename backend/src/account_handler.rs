@@ -1,5 +1,6 @@
-use std::{collections::HashMap, fmt, fs::{self, File}, io::Read};
+use std::{collections::HashMap, fmt, fs::{self, File}, io::Read, sync::Mutex};
 
+use rocket::State;
 use serde::{Deserialize, Serialize};
 
 use crate::{login_info::LoginInformation, user};
@@ -122,3 +123,25 @@ impl fmt::Display for AccountResult {
         write!(f, "{}", serde_json::to_string(self).unwrap())
     }
 }
+
+// #region api calls
+#[get("/")]
+pub fn debug(db: &State<Mutex<Database>>) -> String {
+    let db = db.lock().unwrap();
+    format!("{:?}", db)
+}
+
+#[get("/")]
+pub fn load(db: &State<Mutex<Database>>) -> String {
+    let mut db = db.lock().unwrap();
+    *db = Database::load();
+    "success".to_string()
+}
+
+#[get("/")]
+pub fn save(db: &State<Mutex<Database>>) -> String {
+    let mut db = db.lock().unwrap();
+    db.save();
+    "success".to_string()
+}
+// #endregion
