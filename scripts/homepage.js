@@ -8,9 +8,6 @@ var dateRange = {
 // year, month, day offset
 // var dateOffset = [0, 0, 0];
 
-console.log(username);
-console.log(password);
-
 var container = document.querySelector("#main #content #field");
 var library = [];
 
@@ -163,10 +160,7 @@ function addItem(e, i=null) {
 function fetchLibrary() {
     // return;
     sendPostRequest(`${BACKEND_ADDRESS}/fetch_library/0/1813657600`, login_info(), (r) => {
-        let response = parseResponse(r);
-        library = JSON.parse(response);
-
-        console.log(response);
+        library = JSON.parse(JSON.parse(parseResponse(r)));
 
         gatherChildren();
 

@@ -11,10 +11,11 @@ use rocket::State;
 mod utils;
 mod cors;
 
-mod login_info;
+mod soterius;
+
 mod task;
-mod user;
 mod account_handler;
+mod user;
 
 use account_handler::Database;
 

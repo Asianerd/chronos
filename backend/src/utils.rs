@@ -8160,10 +8160,10 @@ pub fn parse_response_depreciated(data: Result<String, String>) -> String {
     }
 }
 
-pub fn parse_response<T: std::fmt::Debug>(data: Result<T, T>) -> String {
+pub fn parse_response<T: serde::Serialize>(data: Result<T, T>) -> String {
     match data {
-        Ok(d) => format!(r#"{{"type":"success","data":"{}"}}"#, urlencoding::encode(format!("{:?}", d).as_str()).to_string()),
-        Err(e) => format!(r#"{{"type":"fail","error":"{}"}}"#, urlencoding::encode(format!("{:?}", e).as_str()).to_string())
+        Ok(d) => format!(r#"{{"type":"success","data":"{}"}}"#, urlencoding::encode(serde_json::to_string(&d).unwrap().as_str()).to_string()),
+        Err(e) => format!(r#"{{"type":"fail","error":"{}"}}"#, urlencoding::encode(serde_json::to_string(&e).unwrap().as_str()).to_string())
     }
 }
 

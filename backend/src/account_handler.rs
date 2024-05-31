@@ -3,7 +3,7 @@ use std::{collections::HashMap, fmt, fs::{self, File}, io::Read, sync::Mutex};
 use rocket::State;
 use serde::{Deserialize, Serialize};
 
-use crate::{login_info::LoginInformation, user};
+use crate::user;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Database {
@@ -16,76 +16,13 @@ impl Database {
         }
     }
 
-    fn passwords() -> HashMap<u128, String> {
-        serde_json::from_str(fs::read_to_string("data/passwords.json").unwrap().as_str()).unwrap()
-    }
-
-    pub fn username_exists(&self, username: &String) -> bool {
-        for (_, u) in &self.users {
-            if u.name == *username {
-                return true;
-            }
-        }
-        false
-    }
-
     pub fn fetch_user_id(&self, username: &String) -> Option<u128> {
         for (_, u) in &self.users {
-            if u.name == *username {
+            if u.username == *username {
                 return Some(u.id);
             }
         }
         None
-    }
-
-    pub fn login(&self, login: &LoginInformation) -> AccountResult {
-        let user_id = self.fetch_user_id(&login.username);
-        if user_id.is_none() {
-            return AccountResult::UsernameNoExist;
-        }
-
-        let passwords = Database::passwords();
-        let fetch_result = passwords.get(&user_id.unwrap());
-        if fetch_result.is_none() {
-            return AccountResult::UserIDNoExist;
-        }
-        if fetch_result.unwrap() == &login.password {
-            return AccountResult::Success(user_id.unwrap());
-        }
-
-        AccountResult::PasswordWrong
-    }
-
-    pub fn signup(&mut self, login: &LoginInformation) -> AccountResult {
-        if self.username_exists(&login.username) {
-            return AccountResult::UsernameTaken;
-        }
-
-        let user_id = self.generate_user_id();
-
-        self.users.insert(user_id,user::User {
-            id: user_id,
-            name: login.username.clone(),
-            library: HashMap::new(),
-            // repeating_tasks: vec![]
-            // library: HashMap::new()
-        });
-
-        Database::add_password(user_id, &login.password);
-
-        self.save();
-
-        AccountResult::Success(user_id)
-    }
-
-    fn generate_user_id(&self) -> u128 {
-        self.users.len() as u128
-    }
-
-    fn add_password(id: u128, password: &String) {
-        let mut passwords = Database::passwords();
-        passwords.insert(id, password.clone());
-        fs::write("data/passwords.json", serde_json::to_string_pretty(&passwords).unwrap()).unwrap();
     }
 
     pub fn load() -> Database {
