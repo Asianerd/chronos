@@ -159,7 +159,8 @@ function addItem(e, i=null) {
 
 function fetchLibrary() {
     // return;
-    sendPostRequest(`${BACKEND_ADDRESS}/fetch_library/0/1813657600`, login_info(), (r) => {
+    sendPostRequest(`${CHRONOS_BACKEND_ADDRESS}/fetch_library/0/1813657600`, login_info(), (r) => {
+        console.log(r);
         library = JSON.parse(JSON.parse(parseResponse(r)));
 
         gatherChildren();
@@ -433,7 +434,7 @@ function addTask(e) {
     [end, start] = end > start ? [end, start] : [start, end];
     // swap if the task ends before it starts
     let params = `${r_species}/${r_time_species}/${start}/${end}/${r_occurance_species}/${repeating_day}/${encodeURIComponent(title)}/${encodeURIComponent(description)}/${colour}`;
-    sendPostRequest(`${BACKEND_ADDRESS}/add_task/${params}`, login_info(), (r) => {
+    sendPostRequest(`${CHRONOS_BACKEND_ADDRESS}/add_task/${params}`, login_info(), (r) => {
         parseResponse(r);
         fetchLibrary();
     })
