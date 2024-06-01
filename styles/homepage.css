@@ -24,7 +24,6 @@ body {
     overflow:hidden;
 }
 
-/* #region sidebar */
 #sidebar {
     display:flex;
     justify-content: start;
@@ -167,9 +166,7 @@ body {
         }
     }
 }
-/* #endregion */
 
-/* #region main */
 #main {
     /* background:var(--tertiary); */
     width:90%;
@@ -184,8 +181,6 @@ body {
     position:relative;
 
     table {
-        /* background:blue; */
-    
         border-collapse: collapse;
     }
     
@@ -298,7 +293,6 @@ body {
         /* dont know why theres even 1 padding by default */
     }
     
-    /* #region gridlines */
     #gridline {
         position:absolute;
     
@@ -325,9 +319,7 @@ body {
         }
     }
 }
-/* #endregion */
 
-/* #region time-pointer */
 #time-pointer {
     position:absolute;
 
@@ -363,7 +355,6 @@ body {
         transform:none !important;
     }
 }
-/* #endregion */
 
 /* #region item */
 #main #field {
@@ -394,7 +385,6 @@ body {
     filter:drop-shadow(0 0 10px #0009);
 }
 
-/* #region item */
 .item {
     display:flex;
     justify-content: start;
@@ -462,13 +452,9 @@ body {
         font-size:0.9em;
     }
 }
-/* #endregion */
 
-/* #region item container */
 .item-container {
     background:var(--primary);
-
-    /* position:relative; */
 
     display:flex;
     justify-content: center;
@@ -480,13 +466,7 @@ body {
 
     z-index: 200;
 
-    /* top:auto; */
-
-    /* overflow:auto; */
-
     #user-click {
-        /* background:red; */
-    
         position:absolute;
         top:0;
         right:0;
@@ -552,12 +532,125 @@ body {
         }
     }
 }
-/* #endregion */
 
 /* #endregion */
 
-/* #region task creation */
 #content {
+    #time {
+        margin-top:1em;
+        /* padding-left:1em; */
+    
+        /* border-left-style:solid;
+        border-width:2px;
+        border-color:#fff3; */
+    
+        display:flex;
+        justify-content: start;
+        align-items: start;
+        flex-direction: row;
+    
+        h4 {
+            margin-right:1ch;
+            width: max-content;
+        }
+    
+        & > div {
+            display:flex;
+            justify-content: start;
+    
+            h4 {
+                margin:0 1ch;
+            }
+        }
+    
+        #start, #end {
+            display:flex;
+            justify-content: start;
+            align-items: center;
+            flex-direction: column;
+    
+            div + * {
+                font-size: 1em;
+                color:#fffa;
+                font-style:italic;
+            }
+    
+            input[type="date"] {
+                border:none;
+                background:none;
+            }
+    
+            & > div {
+                display:flex;
+                justify-content: start;
+                align-items: center;
+                flex-direction: row;
+        
+                height:2em;
+                overflow: hidden;
+                transition-duration:0.3s;
+            }
+    
+            input[type="number"] {
+                font-size: 1.0em;
+            
+                height:fit-content;
+                width:2ch;
+            
+                margin:0;
+                padding:0;
+            
+                text-align: end;
+                border:none;
+            
+                color:var(--text);
+                background:none;
+            }
+        }
+    
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            display:none;
+            margin:0;
+        }
+    
+        label#all-day {
+            user-select: none;
+            -webkit-user-select: none;
+        
+            height:2em;
+        
+            h4 {
+                color:#fff5;
+            
+                cursor:pointer;
+            }
+        
+            input {
+                display:none;
+            }
+    
+            &:has(input:checked) {
+                h4 {
+                    color:#fff;
+                    text-decoration: underline;
+                }
+            
+                #start > div:first-of-type, 
+                #end > div:first-of-type {
+                    height:0;
+                }
+            }
+        }
+    
+        :has(label#all-day input:checked) {
+            #start > div:first-of-type,
+            #end > div:first-of-type {
+                height:0;
+            }
+        }
+    }
+
     #task-creation { 
         /* background:red; */
         /* background:var(--primary); */
@@ -709,245 +802,122 @@ body {
                 text-decoration: underline;
             }
         }
-    }
-}
 
-/* #region time */
-#content #task-creation #time {
-    margin-top:1em;
-    /* padding-left:1em; */
-
-    /* border-left-style:solid;
-    border-width:2px;
-    border-color:#fff3; */
-
-    display:flex;
-    justify-content: start;
-    align-items: start;
-    flex-direction: row;
-
-    h4 {
-        margin-right:1ch;
-        width: max-content;
-    }
-
-    & > div {
-        display:flex;
-        justify-content: start;
-
-        h4 {
-            margin:0 1ch;
+        & > div:last-of-type {
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+        
+            margin-top:2em;
+        
+            & > div:last-of-type {
+                display:flex;
+                align-items: center;
+            }
         }
-    }
-
-    #start, #end {
-        display:flex;
-        justify-content: start;
-        align-items: center;
-        flex-direction: column;
-
-        div + * {
-            font-size: 1em;
-            color:#fffa;
-            font-style:italic;
+        
+        #create {
+            width:fit-content;
+        
+            border-radius:var(--border-radius);
+        
+            /* background:red; */
+            background:var(--primary);
+        
+            padding:0.8ch 0.8em;
+        
+            cursor:pointer;
+        
+            &[aria-label='disabled'] {
+                opacity: 0.5;
+            
+                cursor:not-allowed;
+            }
         }
 
-        input[type="date"] {
-            border:none;
-            background:none;
+        &[data-species="Repeating"] #time {
+            input[type="date"] {
+                display:none;
+            }
+        
+            &:has(label#all-day input:checked) {
+                & > div > * {
+                    display:none;
+                }
+            
+                #all-day {
+                    display:block;
+            
+                    h4 {
+                        margin-left:0;
+                    }
+                }
+            }
         }
 
-        & > div {
+        &[data-species="Once"] #repeat {
+            display:none;
+        
+            pointer-events: none;
+        }
+    
+        #repeat {
             display:flex;
             justify-content: start;
             align-items: center;
-            flex-direction: row;
-    
-            height:2em;
-            overflow: hidden;
-            transition-duration:0.3s;
-        }
-
-        input[type="number"] {
-            font-size: 1.0em;
         
-            height:fit-content;
-            width:2ch;
+            margin-top:1em;
         
-            margin:0;
-            padding:0;
+            & > div {
+                display:flex;
+                justify-content: start;
+            
+                margin-left:1ch;
         
-            text-align: end;
-            border:none;
+                input {
+                    display:none;
+                }
         
-            color:var(--text);
-            background:none;
-        }
-    }
-
-    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        display:none;
-        margin:0;
-    }
-}
-
-#content #task-creation[data-species="Repeating"] #time {
-    input[type="date"] {
-        display:none;
-    }
-
-    &:has(label#all-day input:checked) {
-        & > div > * {
-            display:none;
-        }
-    
-        #all-day {
-            display:block;
-    
-            h4 {
-                margin-left:0;
+                label {
+                    border-radius: 1000px;
+                
+                    user-select: none;
+                
+                    cursor:pointer;
+        
+                    h5 {
+                        display:flex;
+                        justify-content: center;
+                        align-items: center;
+                    
+                        padding:1ch;
+                    
+                        font-size: 1.2em;
+                    
+                        color:#fff5;
+                    
+                        width:0.5em !important;
+                        height:0.5em !important;
+                    
+                        text-align: center;
+                    
+                        user-select: none;    
+                    }
+        
+                    &:has(input:checked) {
+                        text-decoration: underline;
+        
+                        h5 {
+                            color:#fff;
+                        }
+                    }
+                }
             }
         }
     }
 }
-
-/* #region all-day */
-#content #task-creation #time #all-day {
-    user-select: none;
-    -webkit-user-select: none;
-
-    height:2em;
-}
-
-#content #task-creation #time #all-day h4 {
-    color:#fff5;
-
-    cursor:pointer;
-}
-
-#content #task-creation #time #all-day input {
-    display:none;
-}
-
-#content #task-creation #time label#all-day:has(input:checked) h4 {
-    color:#fff;
-    text-decoration: underline;
-}
-
-#content #task-creation #time:has(label#all-day input:checked) #start > div:first-of-type,
-#content #task-creation #time:has(label#all-day input:checked) #end > div:first-of-type {
-    /* display:none; */
-    height:0;
-}
-/* #endregion */
 /* #endregion */
 
-#content #task-creation > div:last-of-type {
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-top:2em;
-}
-
-#content #task-creation > div:last-of-type > div:last-of-type {
-    display:flex;
-    align-items: center;
-}
-
-#content #task-creation #create {
-    width:fit-content;
-
-    border-radius:var(--border-radius);
-
-    /* background:red; */
-    background:var(--primary);
-
-    padding:0.8ch 0.8em;
-
-    cursor:pointer;
-}
-
-#content #task-creation #create[aria-label='disabled'] {
-    opacity: 0.5;
-
-    cursor:not-allowed;
-}
-
-/* #region repeat */
-#content #task-creation[data-species="Once"] #repeat {
-    display:none;
-
-    pointer-events: none;
-}
-
-#content #task-creation #repeat {
-    display:flex;
-    justify-content: start;
-    align-items: center;
-
-    margin-top:1em;
-}
-
-#content #task-creation #repeat > div {
-    display:flex;
-    justify-content: start;
-
-    margin-left:1ch;
-}
-
-#content #task-creation #repeat > div input {
-    display:none;
-}
-
-#content #task-creation #repeat > div label h5 {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-
-    padding:1ch;
-
-    font-size: 1.2em;
-
-    color:#fff5;
-
-    /* aspect-ratio: 1; */
-    width:0.5em !important;
-    height:0.5em !important;
-
-    text-align: center;
-
-    user-select: none;
-}
-
-#content #task-creation #repeat > div label {
-    border-radius: 1000px;
-
-    /* margin:ch; */
-
-    user-select: none;
-
-    /* font-size:0.2em; */
-
-    cursor:pointer;
-}
-
-#content #task-creation #repeat > div label:has(input:checked) {
-    /* color:#fff; */
-    text-decoration: underline;
-}
-
-#content #task-creation #repeat > div label:has(input:checked) h5 {
-    color:#fff;
-}
-/* #endregion */
-
-/*  */
-
-/* #endregion */
-
-/* #endregion */
 
 /* #region overlay */
 #overlay {
@@ -965,14 +935,10 @@ body {
     display:flex;
     justify-content: center;
     align-items: center;
-}
 
-#overlay[aria-label='closed'] {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#overlay #task-selection {
-
+    &[aria-label='closed'] {
+        opacity: 0;
+        pointer-events: none;
+    }
 }
 /* #endregion */
