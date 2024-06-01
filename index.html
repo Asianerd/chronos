@@ -49,13 +49,13 @@
                         <th></th>
                         <th>
                             <div id="header-container">
-                                <div class="header"><div><h4>mon</h4><h4>14</h4></div><div></div></div>
-                                <div class="header"><div><h4>tue</h4><h4>15</h4></div><div></div></div>
-                                <div class="header"><div><h4>wed</h4><h4>16</h4></div><div></div></div>
-                                <div class="header"><div><h4>thu</h4><h4>17</h4></div><div></div></div>
-                                <div class="header"><div><h4>fri</h4><h4>18</h4></div><div></div></div>
-                                <div class="header"><div><h4>sat</h4><h4>19</h4></div><div></div></div>
-                                <div class="header"><div><h4>sun</h4><h4>20</h4></div><div></div></div>
+                                <div class="header"><div><h4>mon</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>tue</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>wed</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>thu</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>fri</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>sat</h4><h4></h4></div><div></div></div>
+                                <div class="header"><div><h4>sun</h4><h4></h4></div><div></div></div>
                             </div>
                         </th>
                     </thead>
@@ -98,7 +98,7 @@
                             </div>
                             <div id="task-creation" data-colour_theme="0" aria-label="closed" data-species="Once">
                                 <div>
-                                    <input type="text" id="title" placeholder="title" oninput="verifyValidity()">
+                                    <input type="text" id="title" placeholder="title" onchange="verifyValidity()">
                                     <img id="exit-button" src="/assets/cross.png" onclick="toggleTaskCreation(false)">
                                 </div>
                                 <textarea id="description" placeholder="description"></textarea>
@@ -168,39 +168,6 @@
                                 </div>
                             </div>
                             <div id="field">
-                                <!-- <div class="item" style="top:calc(10 * var(--task-height)); height:calc(calc(2 * var(--task-height)) - 4ch); left:calc(var(--task-width) * 0); background:crimson;">
-                                    <div>
-                                        <img id="completion" src="/assets/uncompleted.png">
-                                        <h3 id="title">lorem ipsum dolor sit amet elit</h3>
-                                    </div>
-                                    <h4 id="description">description</h4>
-                                    <h5 id="time">12:00-14:00</h5>
-                                </div> -->
-                                <!-- <div class="item" style="background:royalblue;">
-                                        <h3 id="title">do this bla bla bla bla bla bla</h3>
-                                        <h4 id="time">12:00</h4>
-                                </div>
-                                <div class="item" style="top:10em; left:calc(var(--task-width) * 2); background:crimson;">
-                                    <h3 id="title">do this bla bla bla bla bla bla</h3>
-                                    <h4 id="time">1:30-2:30</h4>
-                                </div>
-                                <div class="item-container" style="top:20em; left:calc(var(--task-width) * 1); height:25em;">
-                                    <h1>
-                                        2
-                                    </h1>
-                                    <div id="user-click" onclick="toggleItemContainer(this)">
-                                    </div>
-                                    <div id="children">
-                                        <div class="item" style="height:25em; left: calc(calc(var(--task-width) * 1) - 1ch); background:crimson;">
-                                            <h3 id="title">do this bla bla bla bla bla bla</h3>
-                                            <h4 id="time">1:30-2:30</h4>
-                                        </div>
-                                        <div class="item" style="height:20em; left: calc(calc(var(--task-width) * 2) - 1ch); background:crimson;">
-                                            <h3 id="title">do this bla bla bla bla bla bla</h3>
-                                            <h4 id="time">1:30-2:30</h4>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                         </td>
                     </tbody>

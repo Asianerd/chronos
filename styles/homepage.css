@@ -402,21 +402,20 @@ body {
         content:url("/assets/uncompleted.png");
     }
 
-
     #completion {
-        /* display:none; */
-    }
-
-    /* TODO : FIX THIS */
-    &[data-completed] {
         display:none;
     }
 
-    &[data-completed='false'] #completion {
+    /* TODO : FIX THIS */
+    &[dataset-completed] #completion {
+        display:block !important;
+    }
+
+    &[dataset-completed='false'] #completion {
         /* display:block !important; */
     }
 
-    &[data-completed='true'] #completion {
+    &[dataset-completed='true'] #completion {
         /* display:block !important; */
         content:url("/assets/completed.png") !important;
     }
@@ -427,8 +426,9 @@ body {
         align-items: center;
 
         width:100%;
+        height:max-content !important;
 
-        overflow:hidden;
+        overflow: hidden;
     }
 
     #title {
@@ -484,7 +484,7 @@ body {
         margin-left:0.5ch;
     }
     
-    img {
+    > img#arrow {
         left:calc(100% + 1em);
     
         position:absolute;
@@ -495,13 +495,13 @@ body {
         transition-duration:0.3s;
     }
     
-    &[aria-label='open'] img {
+    &[aria-label='open'] > img#arrow {
         left:calc(100% - 3em);
     
         transform:rotateY(180deg);
     }
     
-    &:hover img {
+    &:hover > img#arrow {
         opacity: 1;
     }
     
@@ -520,6 +520,10 @@ body {
         /* fixes drop shadow being cut off when displaying above other elements */
         -webkit-transform:translateZ(0);
         transform:translateZ(0);
+    }
+
+    &[aria-label='closed'] #children {
+        pointer-events: none;
     }
     
     &[aria-label='open'] #children {
@@ -597,7 +601,7 @@ body {
                 height:fit-content;
                 width:2ch;
             
-                margin:0;
+                margin:0 0.3ch;
                 padding:0;
             
                 text-align: end;
@@ -609,9 +613,15 @@ body {
         }
     
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+            appearance: none;
             -webkit-appearance: none;
+            -moz-appearance: none;
             display:none;
             margin:0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     
         label#all-day {

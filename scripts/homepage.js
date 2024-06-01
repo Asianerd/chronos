@@ -119,11 +119,12 @@ function populateCalendar() {
             e['children'].forEach((i, index) => {
                 batch += addItem(i, index + 1);
             })
+            // TODO: handle z-index of neighbouring item containers
             container.innerHTML += `<div class="item-container" style="top:calc(${taskHeight} * ${e['position'][1]}); left:calc(${taskWidth} * ${e['position'][0]}); height:calc(calc(${taskHeight} * ${e['height']}) - 4ch);">
     <h1>
         ${e['children'].length}
     </h1>
-    <img src='/assets/right_chevron.png'>
+    <img src='/assets/right_chevron.png' id="arrow">
     <div id="user-click" onclick="toggleItemContainer(this)">
     </div>
     <div id="children">
@@ -144,6 +145,7 @@ function addItem(e, i=null) {
 //     <h3 id="title">${e['title']}</h3>
 // </div>`
 
+    console.log(e['species']);
 
     return `<div class="item" style="top:calc(${pos[1]} * ${taskHeight}); height:calc(calc(${pos[2]} * ${taskHeight}) - 4ch); left:${(i === null ? `calc(var(--task-width) * ${pos[0]})` : `calc(calc(var(--task-width) * ${i}) - 1ch)`)}; background:${colour_themes[e['colour']]};" ${e['species'] == 'Event' ? '' : `dataset-completed="${e['species']['Task']}"`}>
     <div>
@@ -160,7 +162,6 @@ function addItem(e, i=null) {
 function fetchLibrary() {
     // return;
     sendPostRequest(`${CHRONOS_BACKEND_ADDRESS}/fetch_library/0/1813657600`, login_info(), (r) => {
-        console.log(r);
         library = JSON.parse(JSON.parse(parseResponse(r)));
 
         gatherChildren();
@@ -368,6 +369,8 @@ function verifyValidity() {
     b.ariaLabel = t ? 'enabled' : 'disabled';
 }
 
+document.querySelector("#task-creation #create").addEventListener('mouseover', verifyValidity);
+
 function cleanTimeInputAll() {
     let l = document.querySelectorAll('#task-creation #time input[type="number"]');
     cleanTimeInput(l[0]);
@@ -441,6 +444,7 @@ function addTask(e) {
 }
 // #endregion
 
+creationContainer.style.top = `calc(${document.querySelector("#main #header-container").clientHeight}px + var(--task-height) * ${fetchCurrentTime()})`;
 var timerHandler = setInterval(() => {
     setTimePointer();
 }, 250);
