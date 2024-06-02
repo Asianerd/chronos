@@ -265,8 +265,6 @@ body {
         & > div {
             height:var(--task-height);
         
-            /* border-style:solid; */
-        
             display:flex;
             justify-content: center;
             align-items: end;
@@ -278,21 +276,7 @@ body {
         }
     }
     /* #endregion */
-    
-    #content {
-        height:calc(24 * var(--task-height));
-        display:inline-block;
-    
-        width:100%;
-    
-        align-items:start;
-    }
-    
-    tbody td {
-        padding:0;
-        /* dont know why theres even 1 padding by default */
-    }
-    
+
     #gridline {
         position:absolute;
     
@@ -307,6 +291,7 @@ body {
             padding:0;
             margin:0;
             border-style:solid;
+            border-width:1px;
         
             border-right-width: 0;
             border-left-width: 0;
@@ -317,6 +302,20 @@ body {
         
             margin-top:calc(var(--task-height) - 2px);
         }
+    }
+    
+    #content {
+        height:calc(24 * var(--task-height));
+        display:inline-block;
+    
+        width:100%;
+    
+        align-items:start;
+    }
+    
+    tbody td {
+        padding:0;
+        /* dont know why theres even 1 padding by default */
     }
 }
 

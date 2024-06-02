@@ -18,7 +18,7 @@ var creationContainer = document.querySelector("#task-creation");
 
 var timePointerText = document.querySelector("#time-pointer-text");
 var timePointer = document.querySelector("#content #time-pointer");
-var verticalHeaderOffset = 0; // height of vertical headers
+var verticalHeaderOffset = '0px'; // height of vertical headers
 
 // #region colour themees
 var colour_themes = [
@@ -27,22 +27,6 @@ var colour_themes = [
     "forestgreen",
     "dodgerblue",
     "blueviolet"
-    // "coral",
-    // "lightsalmon",
-    // "orange",
-    // "sandybrown",
-    // "tomato",
-    // "dodgerblue",
-    // "blueviolet",
-    // "teal",
-    // // "navy",
-    // "chocolate",
-    // // "darkviolet",
-    // // "hotpink",
-    // "lightslategrey",
-    // // "orangered",
-    // // "tomato"
-    // "forestgreen"
 ];
 // #endregion
 
@@ -140,12 +124,10 @@ function populateCalendar() {
 function addItem(e, i=null) {
     let pos = convertEpochToUnitPosition(e);
     if (pos === null) { return ""; }
-    // console.log(pos);
-//     return `<div class="item" style="top:calc(${pos[1]} * ${taskHeight}); height:calc(calc(${pos[2]} * ${taskHeight}) - 4ch); left:${(i === null ? `calc(var(--task-width) * ${pos[0]})` : `calc(calc(var(--task-width) * ${i}) - 1ch)`)}; background:${colour_themes[e['colour']]};">
-//     <h3 id="title">${e['title']}</h3>
-// </div>`
 
-    console.log(e['species']);
+    console.log(e);
+
+    // TODO : items that span across multiple days
 
     return `<div class="item" style="top:calc(${pos[1]} * ${taskHeight}); height:calc(calc(${pos[2]} * ${taskHeight}) - 4ch); left:${(i === null ? `calc(var(--task-width) * ${pos[0]})` : `calc(calc(var(--task-width) * ${i}) - 1ch)`)}; background:${colour_themes[e['colour']]};" ${e['species'] == 'Event' ? '' : `dataset-completed="${e['species']['Task']}"`}>
     <div>
@@ -155,21 +137,16 @@ function addItem(e, i=null) {
     <h4 id="description">${e['description']}</h4>
     <h5 id="time"></h5>
 </div>`
-
-    // <h4 id="time">${e['time'][0]}-${e['time'][1]}</h4>
 }
 
 function fetchLibrary() {
     // return;
-    sendPostRequest(`${CHRONOS_BACKEND_ADDRESS}/fetch_library/0/1813657600`, login_info(), (r) => {
+    sendPostRequest(`${CHRONOS_BACKEND_ADDRESS}/fetch_library/${dateRange.start}/${dateRange.start + (86400 * (dateRange.length))}`, login_info(), (r) => {
         library = JSON.parse(JSON.parse(parseResponse(r)));
 
         gatherChildren();
 
         populateCalendar();
-
-        // calculate verticalHeaderOffset
-        verticalHeaderOffset = document.querySelector("#header-container").clientHeight + 'px';
     })
 }
 
@@ -213,6 +190,8 @@ function gatherChildren() {
     }
 }
 
+fetchDateRange();
+
 fetchLibrary();
 
 // #region date related
@@ -231,8 +210,6 @@ function fetchDateRange() {
         headers[index].parentElement.parentElement.ariaLabel = index == dateRange['current'] ? 'highlighted' : '';
     })
 }
-
-fetchDateRange();
 
 function fetchDayIndex(d=null) {
     // current day of the week
@@ -446,5 +423,7 @@ function addTask(e) {
 
 creationContainer.style.top = `calc(${document.querySelector("#main #header-container").clientHeight}px + var(--task-height) * ${fetchCurrentTime()})`;
 var timerHandler = setInterval(() => {
+    // calculate verticalHeaderOffset
+    verticalHeaderOffset = document.querySelector("#header-container").clientHeight + 'px';
     setTimePointer();
-}, 250);
+}, 500);
